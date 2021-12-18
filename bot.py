@@ -48,4 +48,4 @@ async def on_message(message):
     
 
 
-client.run('OTIxMjg4NDQzODY5Mzk2OTky.YbwuuQ.HoSmvfn7s2Kaoct0QxtQLi1huxo')
+client.run('토큰입력')
