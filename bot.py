@@ -32,7 +32,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('.코로나'): #봇이 받은 메시지가 .코로나로 시작하면
-        embed=discord.Embed(title="코로나 확진자 정보", color=0x8ce137) #임베드 에브리드 생성
+        embed=discord.Embed(title="코로나 확진자 정보", color=0x8ce137) #임베드 생성
         embed.set_thumbnail(url="https://yt3.ggpht.com/ytc/AKedOLRx1o4FfsK5isI9U-EHzAt7S57Knoyv7MoEIGKpGw=s900-c-k-c0x00ffffff-no-rj" ) #썸네일 설정
         embed.add_field(name="총 확진자", value=f'{covid19_all}명{covid19_today}', inline=True) #임베드에 필드 추가
         embed.add_field(name="총 사망자", value=f'{covid19_die}명{covid19_die_plus}', inline=True) #임베드에 필드 추가
