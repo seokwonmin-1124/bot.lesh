@@ -14,7 +14,7 @@ url = 'http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq
 res = requests.get(url)
 res.raise_for_status()
 
-soup = BeautifulSoup(res.text, 'lxml')
+soup = BeautifulSoup(res.text, 'lxml') #pip install lxml
 covid19_all = soup.select_one('#content > div > div.data_table.midd.mgt24 > table > tbody > tr.sumline > td:nth-child(5)').text #전체 확진자 수
 covid19_today = soup.select_one('#mapAll > div > ul > li:nth-child(6) > div:nth-child(2) > span').text #오늘 확진자 수
 covid19_die = soup.select_one('#mapAll > div > ul > li:nth-child(1) > div:nth-child(2) > span').text #사망자 수
