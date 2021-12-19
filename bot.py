@@ -9,7 +9,7 @@ import requests
 game = discord.Game("LESH와 개발놀이")
 client = discord.Client(status=discord.Status.idle, activity=game)
 
-#코로나 19 웹 크롤링 함수들
+#코로나 19 웹 크롤링
 url = 'http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun=' #이 링크에서 크롤링
 res = requests.get(url)
 res.raise_for_status()
