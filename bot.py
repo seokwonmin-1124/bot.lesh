@@ -1,4 +1,5 @@
 #LESH_21.12.18_코로나 크롤링 기능 구현 완료
+#LESH_22.01.01_사용자 프로필 기능 구현 완료
 #아직 파일 나누는 방법을 몰라 한 파일로 만들었습니다.
 import discord
 from urllib.request import urlopen
@@ -38,6 +39,25 @@ async def on_message(message):
         embed.add_field(name="총 사망자", value=f'{covid19_die}명{covid19_die_plus}', inline=True) #임베드에 필드 추가
         embed.set_footer(text="bot.lesh_확진자 정보" ) #임베드에 푸터 추가
         await message.channel.send(embed=embed) #메시지 전송
+     
+    if message.content.startswith('.uesr embed'):
+        uesr_name = message.author.name
+        user_server_name = message.author.display_name
+        user_tag = message.author.discriminator
+        #name_with_tag = message.author
+        user_id = message.author.id
+        uesr_start_discord_date= message.author.created_at
+        user_profile_img = message.author.avatar_url
+        uesr_mention = message.author.mention
+
+        await message.channel.send(f'bot.lesh가 알려주는 {user_mention} 님의 정보입니다!')
+        embed=discord.Embed(title=f'{uesr_name}님의 정보', color=0x8ce137)
+        embed.add_field(name='이름', value=user_name, inline=True)
+        embed.add_field(name='서버에서의 이름', value=uesr_server_name, inline=True)
+        embed.add_field(name='디스코드를 시작한 날', value=user_start_discord.strftime('%Y-%m-%d'), inline=True)
+        embed.set_thumbnail(url=user_profile_img)
+        embed.set_footer(text=f'{uesr_name}님의 개인 프로필' )
+        await message.channel.send(embed=embed)
 
     if message.content.startswith('.핑'): #봇이 받은 메시지가 .핑으로 시작하면
         await message.channel.send(f'``{client.latency * 1000:.0f}ms``') #봇의 지연시간(핑)을 출력
