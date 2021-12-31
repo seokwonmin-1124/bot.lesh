@@ -4,7 +4,6 @@
 import discord
 from bs4 import BeautifulSoup
 import requests
-from keep_alive import keep_alive
 
 #봇이 하고있는 게임, 상태 설정
 game = discord.Game("LESH와 개발놀이")
@@ -65,8 +64,5 @@ async def on_message(message):
     if message.content.startswith(".비웃어"): #봇이 받은 메시지가 .비웃어로 시작하면
         await message.channel.send("`ㅋ`") #봇이 ㅋ을 출력
 
-    
-
-keep_alive()
 client.run('토큰입력') #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
 
