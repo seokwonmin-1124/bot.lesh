@@ -68,5 +68,5 @@ async def on_message(message):
     
 
 keep_alive()
-client.run('OTIxMjg4NDQzODY5Mzk2OTky.YbwuuQ.nIzfkH2JKBqu3xLu9sfsTZNyGEo') #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
+client.run('토큰입력') #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
 
