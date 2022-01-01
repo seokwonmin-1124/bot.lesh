@@ -16,8 +16,9 @@
 > <img src="https://img.shields.io/badge/Markdown-222?style=flat-square&logo=Markdown&logoColor=fff"/>
   
 ### bot.lesh의 주 기능
-> 코로나 확진자: 하루마다 업데이트되는 코로나 확진자 수를 실시간으로 받아볼 수 있음 [크롤링 사이트](http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun=)<br/>
-> <img src="https://i.ibb.co/N3d09sJ/2021-12-19-7-35-14.png"/> <br/>
+> 코로나 확진자: 하루마다 업데이트되는 코로나 확진자 수를 제공
+> 유저 정보: 사용자의 디스코드를 시작한 날, 프로필 사진, 고유이름, 서버별명을 제공
+> 헥스코드: 여섯자리인 hex 코드의 뷰어를 제공
 > 기능은 더 추가될 예정..
   
 ###### 2021.12.18 start
