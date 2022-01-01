@@ -3,6 +3,7 @@
 #LESH_22.01.01_사용자 프로필 기능 구현 완료
 #LESH_22.01.02_HEX 코드 뷰어 가눙 구현 완료
 #사용 시 출처를 남겨주세요
+
 #-------모듈 import--------#
 import discord
 from bs4 import BeautifulSoup
@@ -30,7 +31,8 @@ async def 핑(ctx):
 async def 비웃어(ctx):
     await ctx.channel.send("`ㅋ`") #봇이 ㅋ을 출력
 
-#--------코로나 함수--------#
+#--------메인기능들--------#
+#----코로나 함수----#
 url = 'http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun=' #이 링크에서 크롤링
 res = requests.get(url)
 res.raise_for_status()
@@ -43,7 +45,6 @@ covid19_die_plus = soup.select_one('#mapAll > div > ul > li:nth-child(2) > div:n
 covid19_date = soup.select_one('#content > div > div.timetable > p > span').text #최종 갱신일
 #covid19_date = covid19_date.replace('.', '-') #최종 갱신일에서 .을 -로 바꿈
 
-#--------메인기능--------#
 @bot.command() #COVID19
 async def 코로나(ctx):
     embed=discord.Embed(title="코로나 확진자 정보", color=0x8ce137) #임베드 생성
