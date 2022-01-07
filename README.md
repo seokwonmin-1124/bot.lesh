@@ -20,5 +20,6 @@
 > 유저 정보: 사용자의 디스코드를 시작한 날, 프로필 사진, 고유이름, 서버별명을 제공<br/>
 > 헥스코드: 여섯자리인 hex 코드의 뷰어를 제공<br/><br/>
 > 기능은 더 추가될 예정..
+> [`초대 링크`](https://discord.com/api/oauth2/authorize?client_id=921288443869396992&permissions=380104624192&scope=bot)
 
 ###### 2021.12.18 start
