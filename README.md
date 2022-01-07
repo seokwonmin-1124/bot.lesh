@@ -2,7 +2,7 @@
 
 ### <i><b>Intro<br></i></b>
 
->디스코드 봇`bot.lesh`의 소스입니다.<br>
+>디스코드 봇[`bot.lesh`](https://discord.com/api/oauth2/authorize?client_id=921288443869396992&permissions=380104624192&scope=bot)의 소스입니다.(링크를 클릭하면 초대 화면으로 변경됩니다.)<br>
 
 ### <i><b>Member<br></i></b>
 
@@ -19,7 +19,7 @@
 > 코로나 확진자: 하루마다 업데이트되는 코로나 확진자 수를 제공<br/>
 > 유저 정보: 사용자의 디스코드를 시작한 날, 프로필 사진, 고유이름, 서버별명을 제공<br/>
 > 헥스코드: 여섯자리인 hex 코드의 뷰어를 제공<br/><br/>
-> 기능은 더 추가될 예정..<br/>
-> [`초대 링크`](https://discord.com/api/oauth2/authorize?client_id=921288443869396992&permissions=380104624192&scope=bot)
+> 기능은 더 추가될 예정..
+
 
 ###### 2021.12.18 start
