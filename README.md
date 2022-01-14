@@ -16,6 +16,7 @@
 > <img src="https://img.shields.io/badge/Markdown-222?style=flat-square&logo=Markdown&logoColor=fff"/>
   
 ### bot.lesh의 주 기능
+> 도움말: 봇이 할 수 있는 명령어를 알려줌
 > 코로나 확진자: 하루마다 업데이트되는 코로나 확진자 수를 제공<br/>
 > 유저 정보: 사용자의 디스코드를 시작한 날, 프로필 사진, 고유이름, 서버별명을 제공<br/>
 > 헥스코드: 여섯자리인 hex 코드의 뷰어를 제공<br/><br/>
