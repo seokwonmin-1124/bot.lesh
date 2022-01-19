@@ -18,7 +18,7 @@ README.md<br/>
 <img src="https://img.shields.io/badge/Markdown-222?style=flat-square&logo=Markdown&logoColor=fff"/>
   
 ### bot.lesh의 주 기능
-`코로나` `hex` `프로필` `비웃어`
+`코로나` `hex` `프로필` `비웃어`<br/>
 기능은 더 추가될 예정..
 
 
