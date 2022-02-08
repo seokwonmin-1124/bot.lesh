@@ -1,17 +1,12 @@
-#LESH_21.12.18_코로나 크롤링 기능 구현 완료
-#LESH_22.01.01_사용자 프로필 기능 구현 완료
-#LESH_22.01.02_HEX 코드 뷰어 가능 구현 완료
-#LESH_22.01.17_기존 도움말 기능 단축화 완료
-#LESH_22.01.19_프로필 기능 업데이트 완료
 #사용 시 출처를 남겨주세요
 import asyncio
 import discord
-from bs4 import BeautifulSoup
+import sqlite3
 import requests
+import covid
+from bs4 import BeautifulSoup
 from discord.ext import commands
 from keep_alive import keep_alive
-import list_blok
-import list_admin
 
 
 intents = discord.Intents.default()
@@ -30,44 +25,45 @@ async def on_message(message):
     if message.author == bot.user: #봇이 보낸 메시지는 무시(유저만 받음)
         return
 
-    if message.author.id in list_blok.list:
-        return
+@bot.command(aliases=['메모'])
+async def memo(ctx, *, sentence):
 
-@bot.command(aliases=['차단확인'])
-async def blok_ok(ctx, author_id):
-    await ctx.send(f'{ctx.author.mention}님, {author_id}님의 차단 확인 여부입니다.')
+    option = sentence.split(" ")[0]
+    memo = "".join(sentence[2:])
+    user_id = str(ctx.author.id)
 
-    if author_id in list_blok.list_str:
-        await ctx.channel.send(f"`{author_id}님은 차단된 유저입니다.`")
-    else:
-        await ctx.channel.send(f"`{author_id}님은 차단되지 않은 유저입니다.`")
+    if option == "생성":
+        conn = sqlite3.connect('memo_main.db')
+        cursor = conn.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS memo (user_id text PREMENT KEY, memo text)")
+        cursor.execute(f"INSERT INTO memo VALUES('{user_id}', '{memo}')")
+        conn.commit()
+        conn.close()
+        await ctx.send("메모가 저장되었습니다.")
+    
+    elif option == "불러오기":
+        conn = sqlite3.connect('memo_main.db')
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT memo FROM memo WHERE user_id = '{user_id}'")
+        a = cursor.fetchone()
+        await ctx.send(a[0])
+        conn.close()
+    
+    elif option == "삭제":
+        conn = sqlite3.connect('memo_main.db')
+        cursor = conn.cursor()
+        cursor.execute(f"DELETE FROM memo WHERE user_id = '{user_id}'")
+        conn.commit()
+        conn.close()
+        await ctx.send("메모가 삭제되었습니다.")
 
-@blok_ok.error
-async def blok_ok_error(ctx, error):
-    await ctx.send(f'{ctx.author.mention}님의 차단 확인 여부입니다.')
-
-    if ctx.author.id in list_blok.list:
-        await ctx.send(f"{ctx.author.mention}`님은 차단된 유저입니다.`")
-    else:
-        await ctx.send(f"{ctx.author.mention}`님은 차단되지 않은 유저입니다.`")
-
-@bot.command(aliases=['관리자확인'])
-async def admin_ok(ctx, author_id):
-    await ctx.send(f'{ctx.author.mention}님, {author_id}님의 관리자 여부입니다.')
-
-    if author_id in list_blok.list_str:
-        await ctx.channel.send(f"'{author_id}님은 관리자 입니다.`")
-    else:
-        await ctx.channel.send(f"`{author_id}님은 관리자가 아닙니다.`")
-
-@admin_ok.error
-async def admin_ok_error(ctx, error):
-    await ctx.send(f'{ctx.author.mention}님의 관리자 여부입니다.')
-
-    if ctx.author.id in list_admin.list:
-        await ctx.send(f"{ctx.author.mention}`님은 관리자 입니다.`")
-    else:
-        await ctx.send(f"{ctx.author.mention}`님은 관리자가 아닙니다.`")
+    elif option == "수정":
+        conn = sqlite3.connect('memo_main.db')
+        cursor = conn.cursor()
+        cursor.execute(f"UPDATE memo SET memo = '{memo}' WHERE user_id = '{user_id}'")
+        conn.commit()
+        conn.close()
+        await ctx.send("메모가 수정되었습니다.")
 
 @bot.command(aliases=['핑']) #ping
 async def ping(ctx):
@@ -81,25 +77,13 @@ async def scoff(ctx):
 async def dont_scoff(ctx):
     await ctx.channel.send("`넵`") #봇이 넵을 출력
 
-url = 'http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun=' #이 링크에서 크롤링
-res = requests.get(url)
-res.raise_for_status()
-
-soup = BeautifulSoup(res.text, 'lxml')
-covid19_all = soup.select_one('#content > div > div.data_table.midd.mgt24 > table > tbody > tr.sumline > td:nth-child(5)').text #전체 확진자 수
-covid19_today = soup.select_one('#mapAll > div > ul > li:nth-child(6) > div:nth-child(2) > span').text #오늘 확진자 수
-covid19_die = soup.select_one('#mapAll > div > ul > li:nth-child(1) > div:nth-child(2) > span').text #사망자 수
-covid19_die_plus = soup.select_one('#mapAll > div > ul > li:nth-child(2) > div:nth-child(2) > span').text #전일대비 사망자 증가율
-covid19_date = soup.select_one('#content > div > div.timetable > p > span').text #최종 갱신일
-#covid19_date = covid19_date.replace('.', '-') #최종 갱신일에서 .을 -로 바꿈
-
-@bot.command(aliases=['코로나']) #COVID19
+@bot.command(aliases=['코로나']) #COVID file local import
 async def covid19(ctx):
     embed=discord.Embed(title="코로나 확진자 정보", color=0x8ce137) #임베드 생성
     embed.set_thumbnail(url="https://yt3.ggpht.com/ytc/AKedOLRx1o4FfsK5isI9U-EHzAt7S57Knoyv7MoEIGKpGw=s900-c-k-c0x00ffffff-no-rj" ) #썸네일 설정
-    embed.add_field(name="총 확진자", value=f'{covid19_all}명{covid19_today}', inline=True) #임베드에 필드 추가
-    embed.add_field(name="총 사망자", value=f'{covid19_die}명{covid19_die_plus}', inline=True) #임베드에 필드 추가
-    embed.set_footer(text=f'{covid19_date}시 기준 확진자 정보입니다' ) #임베드에 푸터 추가
+    embed.add_field(name="총 확진자", value=f'{covid.all}명{covid.today}', inline=True) #임베드에 필드 추가
+    embed.add_field(name="총 사망자", value=f'{covid.die}명{covid.die_plus}', inline=True) #임베드에 필드 추가
+    embed.set_footer(text=f'{covid.date}시 기준 확진자 정보입니다' ) #임베드에 푸터 추가
     await ctx.channel.send(embed=embed) #메시지 전송
 
 
@@ -243,6 +227,12 @@ async def help(ctx, help_opt):
         embed.set_footer(text="bot.lesh 도움말 코로나")
         await ctx.channel.send(embed=embed)
 
+    elif help_opt == "메모":
+        embed=discord.Embed(title="명령어 메모의 도움말 입니다.", color=0x8ce137)
+        embed.add_field(name="명령어 설명", value="`,메모 <옵션>`을 입력하면 메모를 작성 해 줍니다.\n옵션: 생성, 불러오기, 수정, 삭제", inline=False)
+        embed.set_footer(text="bot.lesh 도움말 내정보")
+        await ctx.channel.send(embed=embed)
+
     elif help_opt == "도움말":
         embed=discord.Embed(title="명령어 도움말의 도움말 입니다.", color=0x8ce137)
         embed.add_field(name="명령어 설명", value="`,도움말`를 입력하면 레쉬봇이 실행할 수 있는 명령어를 알려드립니다.", inline=False)
@@ -268,6 +258,12 @@ async def help(ctx, help_opt):
         embed.set_footer(text="bot.lesh 도움말 핑")
         await ctx.channel.send(embed=embed)
 
+    elif help_opt == "타이머":
+        embed=discord.Embed(title="명령어 타이머의 도움말 입니다.", color=0x8ce137)
+        embed.add_field(name="명령어 설명", value="`,타이머 <초>`를 입력하면 입력하신 초만큼 타이머를 맞춰줍니다.\n(최대 5분)", inline=False)
+        embed.set_footer(text="bot.lesh 도움말 타이머")
+        await ctx.channel.send(embed=embed)
+
     else:
         embed = discord.Embed(title="잘못된 입력입니다.", description="도움말 목록을 다시 확인하세요", color=0xff0000)
         await ctx.send(embed=embed)
@@ -276,7 +272,7 @@ async def help(ctx, help_opt):
 async def hlep_error(ctx, error):
     embed=discord.Embed(title="bot.lesh의 도움말 입니다", color=0x8ce137)
     embed.add_field(name="명령어 설명", value="`,도움말 <명령어>`으로 명령어에 대해 더 자세하게 알아보세요", inline=False)
-    embed.add_field(name="명령어", value="`,도움말`, `,코로나`, `,hex`\n`,프로필`, `,개발자정보`, `,봇정보`, `,서버정보`\n`,초대`, `,비웃어`, `,핑`", inline=False)
+    embed.add_field(name="명령어", value="`,도움말`, `,코로나`, `,hex`, `,메모`, `,타이머`\n`,프로필`, `,개발자정보`, `,봇정보`, `,서버정보`\n`,초대`, `,비웃어`, `,핑`, `디데이,일정(개발중)`", inline=False)
     embed.set_footer(text="bot.lesh 도움말")
     await ctx.channel.send(embed=embed)
 
@@ -312,5 +308,4 @@ async def timer_error(ctx, error):
     await ctx.send(embed=embed)
 
 keep_alive()
-bot.run('토큰 입력') #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
-#github 레파지토리 검색 봇 만들기
+bot.run(token입력) #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
