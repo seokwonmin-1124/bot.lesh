@@ -20,6 +20,38 @@ async def on_ready():
     print("logged in as {0.user}".format(bot)) #봇이 로그인 하면 로그인 정보를 출력
 """    await bot.change_presence(status=discord.Status.online, activity=discord.Game("코로나 크롤링 기능 구현 완료"))"""
 
+@bot.command(aliases=['시간표'])
+async def siganpyo(ctx, period):
+
+    if period == "1교시":
+        await ctx.send("1교시는`9:10`에 시작합니다!")
+    
+    elif period == "2교시":
+        await ctx.send("2교시는`10:05`에 시작합니다!")
+
+    elif period == "3교시":
+        await ctx.send("3교시는`11:00`에 시작합니다!")
+
+    elif period == "4교시":
+        await ctx.send("4교시는`11:55`에 시작합니다!")
+
+    elif period == "점심시간":
+        await ctx.send("점심시간은`01:50`까지입니다")
+    
+    elif period == "5교시":
+        await ctx.send("5교시는`01:50`에 시작합니다!")
+
+    elif period == "6교시":
+        await ctx.send("6교시는`02:45`에 시작합니다!")
+
+    elif period == "7교시":
+        await ctx.send("7교시는`03:40`에 시작합니다!")
+
+@siganpyo.error
+async def period_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("1교시:`9:10`\n2교시:`10:05`\n3교시:`11:00`\n4교시:`11:55`\n점심시간:`01:50`\n5교시:`01:50`\n6교시:`02:45`\n7교시:`03:40`")
+
 
 async def on_message(message):
     if message.author == bot.user: #봇이 보낸 메시지는 무시(유저만 받음)
@@ -308,4 +340,4 @@ async def timer_error(ctx, error):
     await ctx.send(embed=embed)
 
 keep_alive()
-bot.run(token입력) #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
+bot.run('토큰입력하세요') #봇이 실행되면 토큰 파일을 읽어서 봇이 로그인함
